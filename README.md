@@ -1,4 +1,4 @@
-# ai-2016
+# AI-2016
 Pour la deuxième année consécutive, nous avons le bonheur de vous inviter à la compétition d'AI JDIs.
 
 ## FAQ
