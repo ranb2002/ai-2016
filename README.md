@@ -1,4 +1,4 @@
-# AI-2016
+# AI-2016 <img src="https://github.com/JDIS/ai-2016/blob/master/logo.png" width="150">
 Pour la deuxième année consécutive, nous avons le bonheur de vous inviter à la compétition d'AI JDIs.
 
 ## FAQ
