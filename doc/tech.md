@@ -24,11 +24,11 @@ The requests you will have to send to the server will depend on the mode you are
 In training mode, you can play against some dummy bots, you can specify the number of turns you want to play and, if you want, you can provide a specific map to test your algorithms. The games played in Training mode are not scored, so feel free to use it as much as you want.
 
 In training mode, the url you will need to use is:
-`http://blitz2016.xyz:8080/api/training`
+`http://dis-ia.dinf.fsci.usherbrooke.ca:80/api/training`
 
 Here are the steps you need to follow to play in training mode
 
-1. Send a POST HTTP request to the http://blitz2016.xyz:8080/api/training URL to get the initial game state. Here are the parameters you can pass in the POST body:
+1. Send a POST HTTP request to the http://dis-ia.dinf.fsci.usherbrooke.ca:80/api/training URL to get the initial game state. Here are the parameters you can pass in the POST body:
   * key (required)
     * The secret key you were given
   * turns
@@ -50,11 +50,11 @@ Here are the steps you need to follow to play in training mode
 In arena mode, you will play against other players. Your games will be rated and your rank will be updated accordingly.
 
 In arena mode, the url you will need to use is:
-`http://blitz2016.xyz:8080/api/arena`
+`http://dis-ia.dinf.fsci.usherbrooke.ca:80/api/arena`
 
 Here are the steps you need to follow to play in arena mode:
 
-1. Send a POST HTTP request to the http://blitz2016.xyz:8080/api/arena URL to get the initial game state. There are two required parameters for this call:
+1. Send a POST HTTP request to the http://dis-ia.dinf.fsci.usherbrooke.ca:80/api/arena URL to get the initial game state. There are two required parameters for this call:
   * key (required)
     * The secret key your team was given
   * gameId

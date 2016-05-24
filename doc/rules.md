@@ -1,18 +1,15 @@
 # Aperçu
-
 Vous avez 8 heures pour concevoir une intelligence artificielle (IA ou AI) permettant d’accumuler un maximum de points à notre petit jeu.
 
 Vous serez évalués sur le talent de votre AI à accumuler des points, à attaquer ses adversaires, et à boire de la bière...
 
 # Vous aurez à votre disposition
-
 - Cette documentation
 - Différents outils et exemples de code dans les langages supportés
   - Simulateur de parties
   - Exemple d’AI
 
 # Quelques règles pour une saine compétition
-
 - L’utilisation de librairies externes doit être autorisée.
   - Aucune librairie d’intelligence artificielle, de parcours de graphe ou de ce type n’est permise. L’objectif du concours est que vous codiez votre propre intelligence artificielle!
 - Tout le code doit être écrit sur place la journée même.
@@ -21,10 +18,7 @@ Vous serez évalués sur le talent de votre AI à accumuler des points, à attaq
 - Le non-respect des règles peut mener à l’élimination de l’équipe.
 - Un test antidopage sera réalisé à la fin du défi pour s'assurer que le code a été réalisé sans l’aide de produits dopants. :P
 
-# Prix
-
 # Horaire
-
 - 9h00        Arrivée et installation des participants
 - 9h30        Présentation du défi
 - 9h45        Début de la compétition
@@ -36,20 +30,14 @@ Vous serez évalués sur le talent de votre AI à accumuler des points, à attaq
 Les informations de dernière minute vous seront transmises via Slack sur le canal #ai. Assurez-vous d’être inscrit sur Slack et d’avoir les notifications appropriées pour ne pas manquer de messages importants!
 
 # Les rondes
-
 **Vous ne pouvez participer qu’une seule fois par match.
 Assurez-vous donc que votre code fonctionne!**
 
 # Généralités
 ## Saison régulière
-Durant les 2 premières rondes, votre AI devra faire plusieurs matchs par ronde et chaque match oppose 4 équipes.
-## Phase éliminatoire
-**À noter que nous allons surement devoir changer les chiffres ici, si nous n'avons pas le bon nombre d'équipe.**
-
-Basés sur le classement des équipes suivant les rondes précédentes, les premiers matchs opposeront les meilleures équipes aux pires (1ère-2e-15e-16e, 3e-4e-13e-14e, etc.). Les deux premières équipes de chacun de ces quatre matchs s’affronteront entre elles dans deux parties éliminatoires qui éliminera les deux équipes qui finiront 4e. Quant à elles, les deux dernières équipes s’affronteront dans deux parties suicides où seules les deux équipes qui finiront en tête survivront. Ensuite, les deux meilleures équipes des demi-finales se feront face en finale pour finalement déterminer celle qui remportera les grands honneurs.
-
-### Répartition des points selon les rondes et les positions après les matchs
-Chaque match a un code (A, B, C, …). Chaque équipe obtient un résultat. Le résultat est le code du match ainsi que la position de l’équipe dans ce match. Une équipe qui est en demi finale dans le match A (code DA) et qui termine premier aura comme résultat DA1. Les participants de chaque match sont déterminés en fonction des résultats des match précédents.
+Durant les 2 premières rondes, votre AI devra faire plusieurs matchs par ronde
+et chaque match oppose 4 équipes.  La deuxième ronde aura plus d'impact sur les
+points que la première.
 
 | Ronde | Position de l’équipe | Points attribués |
 | --- | --- | --- |
@@ -61,62 +49,43 @@ Chaque match a un code (A, B, C, …). Chaque équipe obtient un résultat. Le r
   | 2 | 4 |
   | 3 | 2 |
   | 4 | 0 |
-3 | 1 | 9 |
-  | 2 | 6 |
-  | 3 | 3 |
-  | 4 | 0 |
 
-En cas d'égalité dans un match, les équipes égales auront le nombre de points attribués au plus bas rang commun (ex: s’il y a égalité en 2e place, les deux équipes se partageront les points donnés à la 3e place).
+En cas d'égalité dans un match, les équipes égales auront le nombre de points
+attribués au plus bas rang commun (ex: s’il y a égalité en 2e place, les deux
+équipes se partageront les points donnés à la 3e place).
 
-Les points des rondes 1 et 2 servent au classement des équipes pour la phase éliminatoire. En cas d’égalité entre des équipes après la saison régulière, l’équipe ayant accumulé le plus de points dans le ou les matchs les mettant en vedette sera favorisée par rapport à l’autre.
+Les points des rondes 1 et 2 servent au classement des équipes pour la phase
+éliminatoire. En cas d’égalité entre des équipes après la saison régulière,
+l’équipe ayant accumulé le plus de points dans le ou les matchs les mettant en
+vedette sera favorisée par rapport à l’autre.
 
-Dans la phase éliminatoire, les points ne servent qu’à déterminer les équipes gagnantes et perdantes.
+## Phase éliminatoire
+À 16h commenceront les éliminatoires. Pendant qu’elles se déroulent, nous allons
+inviter les équipes à venir décrire leur AI.
 
-## Éliminatoires
-À 16h commenceront les éliminatoires. Pendant qu’elles se déroulent, nous allons inviter les équipes à venir décrire leur AI.
+**À noter que nous allons surement devoir changer les chiffres ici, si nous
+n'avons pas le bon nombre d'équipe.**
 
-### Déroulement des éliminatoires
+Basés sur le classement des équipes suivant les rondes précédentes, les premiers
+matchs opposeront les meilleures équipes aux pires). Les deux premières équipes
+de chacun de ces quatre matchs s’affronteront entre elles dans deux parties
+éliminatoires qui éliminera les deux équipes qui finiront 4e. Quant à elles, les
+deux dernières équipes s’affronteront dans deux parties suicides où seules les
+deux équipes qui finiront en tête survivront. Ensuite, les deux meilleures
+équipes des demi-finales se feront face en finale pour finalement déterminer
+celle qui remportera les grands honneurs.
 
-8es de finale
-Pour les 8es  de finales, les équipes sont regroupées en match selon leur classement dans les rondes précédentes.
+**Note**: En cas d’égalité dans le cadre d’un match de phase éliminatoire,
+l’équipe ayant remporté le plus de points dans les rondes 1 et 2 l’emporte.
 
-|Match | Équipes (rang) | Résultats |
-| --- | --- | --- |
-A | 1er, 2e, 15e, 16e | A1, A2, A3, A4 
-B | 3e, 4e, 13e, 14e | B1, B2, B3, B4
-C | 5e, 6e, 11e, 12e |C1, C2, C3, C4
-D | 7e, 8e, 9e, 10e  | D1, D2, D3, D4
+### Comment gagner?
+**L'équipe gagnante est celle qui termine première lors du dernier match.**
 
-Quarts de finale
-
-| Match | Équipes | Résultats |
-| --- | --- | --- |
-QA (gagnants des matchs A et D) | A1, A2, D1, D2 | QA1, QA2, QA3, ~~QA4~~
-QB (gagnants des matchs B et C) | B1, B2, C1, C2 | QB1, QB2, QB3, ~~QB4~~
-QC (perdants des matchs A et D) | A3, A4, D1, D2 | QC1, ~~QC2~~, ~~QC3~~, ~~QC4~~
-QD (perdants des matchs B et C) | B3, B4, C3, C4 | QD1, ~~QD2~~, ~~QD3~~, ~~QD4~~
-
-Demi-finales
-
-| Match | Équipes | Résultats |
-| --- | --- | --- |
-DA (3 premiers de QA + 1er de QC) | QA1, QA2, QA3, QC1 | DA1, DA2, ~~DA3~~, ~~DA4~~
-DB (3 premiers de QB + 1er de QD) | QB1, QB2, QB3, QD1 | DB1, DB2, ~~DB3~~, ~~DB4~~
-
-Finale
-
-| Match | Équipes | Résultats |
-| --- | --- | --- |
-F (2 premiers de chaque demi-finale) | DA1, DA2, DB1, DB2 | F1, ~~F2~~, ~~F3~~, ~~F4~~
-
-L’équipe gagnante dans le match final (F1) se mérite le premier prix!
-
-Pour les autres, ils pourront toujours retenter leur chance l’an prochain!
-
-**Note**: En cas d’égalité dans le cadre d’un match de phase éliminatoire, l’équipe ayant remporté le plus de points dans les rondes 1, 2 et 3 l’emporte.
+Dans la phase éliminatoire, les points ne servent qu’à déterminer les équipes
+gagnantes et perdantes.
 
 # Détails et bidules utiles
- section contient des informations détaillées pour vous aider durant le concours.
+Cette section contient des informations détaillées pour vous aider durant le concours.
 
 ## Projet de base
 Pour votre langage choisi, il y a un projet de base. Celui-ci inclut déjà toute la communication nécessaire avec le serveur. L’AI y est cependant légèrement simpliste (RNG style).
