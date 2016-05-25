@@ -55,3 +55,6 @@ des points. À la fin de la journée, nous cumulerons ces points et couronnerons
 SVP ne tentez pas d'utiliser d'AI déjà fait. Cela pourrait simplement détruire la compétion.
 Si nous détectons du code trop inspiré de code existant, vous serez tout simplement éliminé
 et la compétition sera un peu moins plaisante pour tout le monde.
+
+# Sponsors
+Cette édition de la compétition a été gracieusement soutenu par Wolters Kluwer et Coveo.
