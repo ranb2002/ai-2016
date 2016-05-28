@@ -208,12 +208,23 @@ namespace CoveoBlitz.Bot
             _pathFinder.UpdateBoard(state.board);
             var path = _pathFinder.ShortestPath(state.myHero.pos, nearestOtherMine);
 
-            if (path.Count() * MOVE_LIFE_COST + GOBELIN_LIFE_COST >= state.myHero.life)
+            if (PathCost(state, path) * MOVE_LIFE_COST + GOBELIN_LIFE_COST >= state.myHero.life)
             {
                 return true;
             }
 
             return false;
+        }
+
+        private int PathCost(GameState state, IList<Pos> listPos)
+        {
+            int cost = listPos.Count;
+            var board = state.board;
+
+            foreach (Pos p in listPos)
+                cost += state.board[p.x][p.y] == Tile.SPIKES ? PIKES_LIFE_COST : 0;
+
+            return cost;
         }
 
         private bool IsBarInMyRange(GameState state)

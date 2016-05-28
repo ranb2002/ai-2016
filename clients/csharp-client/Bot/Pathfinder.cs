@@ -7,6 +7,8 @@ namespace CoveoBlitz.Bot
     public class Pathfinder
     {
         private Tile[][] Board;
+        private static int PIKES_LIFE_COST = 10;
+        private static int MOVE_LIFE_COST = 1;
 
         /// <summary>
         /// Creates a pathfinder.
@@ -59,7 +61,7 @@ namespace CoveoBlitz.Bot
 
                 foreach (var v in neighbors) {
                     if (IsPassable(v) && !distances.ContainsKey(v)) {
-                        distances.Add (v, distances [u] + 1);
+                        distances.Add (v, distances [u] + 1 /*+ Board[v.x][v.y] == Tile.SPIKES ? PIKES_LIFE_COST : 0*/);
                         predecessors.Add(v, u);
                         nodes.Add(v);
                     }
