@@ -85,7 +85,7 @@ namespace CoveoBlitz.Bot
             var nearestOtherMine = FindNearestOtherMine(state);
             var nearestHero = FindNearestHero(state);
 
-            if (IsMyLifeAtRisk(state, nearestOtherMine) && state.myHero.gold >= COST_OF_BEER)
+            if (IsMyLifeAtRisk(state, nearestOtherMine, nearestBar) && state.myHero.gold >= COST_OF_BEER)
                 return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
             
             if (IsBarInMyRange(state) && state.myHero.life < (MAX_LIFE - 10) && state.myHero.gold >= COST_OF_BEER)
@@ -210,11 +210,12 @@ namespace CoveoBlitz.Bot
             return nearestHero;
         }
 
-        private bool IsMyLifeAtRisk(GameState state, Pos nearestOtherMine)
+        private bool IsMyLifeAtRisk(GameState state, Pos nearestOtherMine, Pos nearestBar)
         {
-            var path = _pathFinder.ShortestPath(state.myHero.pos, nearestOtherMine);
+            var pathToNearestMine = _pathFinder.ShortestPath(state.myHero.pos, nearestOtherMine);
+            var pathFromMineToBar = _pathFinder.ShortestPath(nearestOtherMine, nearestBar);
 
-            if (PathCost(state, path) * MOVE_LIFE_COST + GOBELIN_LIFE_COST >= state.myHero.life)
+            if (PathCost(state, pathToNearestMine) + GOBELIN_LIFE_COST + PathCost(state, pathFromMineToBar) >= state.myHero.life)
             {
                 return true;
             }
