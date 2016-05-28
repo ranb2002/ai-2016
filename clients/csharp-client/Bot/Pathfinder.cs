@@ -25,7 +25,7 @@ namespace CoveoBlitz.Bot
         public string NavigateTowards(Pos source, Pos destination)
         {
             var path = ShortestPath(source, destination);
-            path.ToList().ForEach(i => Console.Write("{0}\t", i));
+            //path.ToList().ForEach(i => Console.Write("{0}\t", i));
             if (path.Count > 0) return DirectionTowards(source, path[0]);
             return Direction.Stay;
         }
@@ -55,7 +55,7 @@ namespace CoveoBlitz.Bot
 
                 if (neighbors.Contains(destination)) {
                     predecessors.Add(destination, u);
-                    Console.WriteLine ("DONE");
+                    //Console.WriteLine ("DONE");
                     break;
                 }
 
@@ -99,7 +99,7 @@ namespace CoveoBlitz.Bot
         private bool IsPassable(Pos p)
         {
             var tile = Board[p.x][p.y];
-            return tile == Tile.FREE ||
+            return tile == Tile.FREE || tile == Tile.SPIKES ||
                 tile == Tile.HERO_1 || tile == Tile.HERO_2 ||
                 tile == Tile.HERO_3 || tile == Tile.HERO_4;
         }
