@@ -96,9 +96,31 @@ namespace CoveoBlitz.Bot
         /// <summary>
         /// This is run after the game.
         /// </summary>
-        public void Shutdown()
+        public void Shutdown(GameState state)
         {
-            Console.WriteLine("Done");
+            int myGold = state.myHero.gold;
+
+            int numBestGold = 0;
+            string nameBestGold = "";
+
+            Hero p;
+
+            //Look who win this round
+            for (int i = 0; i < _numPlayers; ++i)
+            {
+                p = state.heroes[i];
+
+                if(p.gold >= numBestGold)
+                {
+                    numBestGold = p.gold;
+                    nameBestGold = p.name;
+                }
+            }
+
+            if (myGold == numBestGold)
+                Console.WriteLine("RAWR's Bot Win this round with " + myGold + " golds!");
+            else
+                Console.WriteLine(nameBestGold + "'s Bot Win this round with " + numBestGold + " golds against " + myGold + " golds for RAWR's Bot!");
         }
 
         private List<Pos> FindTile(GameState state, Tile type)

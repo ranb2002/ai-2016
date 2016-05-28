@@ -66,7 +66,7 @@ namespace CoveoBlitz
             }
 
             // Bot's shutdown step
-            simpleBot.Shutdown();
+            simpleBot.Shutdown(api.gameState);
         }
     }
 }

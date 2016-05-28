@@ -4,7 +4,7 @@ namespace CoveoBlitz
     {
         void Setup(GameState state);
 
-        void Shutdown();
+        void Shutdown(GameState state);
 
         string Move(GameState state);
     }
