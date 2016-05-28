@@ -43,7 +43,7 @@ namespace CoveoBlitz.Bot
         {
             _pathFinder = new Pathfinder(state.board);
             ParseMap(state);
-            Console.WriteLine("RAWR's - C# - RAWRBot v.1.0");
+            Console.WriteLine("RAWR's - C# - RAWRBot v.1.1");
         }
 
         private void ParseMap(GameState state)
