@@ -22,6 +22,7 @@ namespace CoveoBlitz.Bot
         private static int PIKES_LIFE_COST = 10;
         private static int BEER_LIFE_GAIN = 25;
         private static int MOVE_LIFE_COST = 1;
+        private static int MAX_LIFE = 100;
 
         private List<Pos> _bars;
         private List<Pos> _myMines;
@@ -83,14 +84,16 @@ namespace CoveoBlitz.Bot
             var nearestBar = FindNearestBar(state);
             var nearestOtherMine = FindNearestOtherMine(state);
 
-            if (IsMyLifeAtRisk(state, nearestOtherMine))
+            if (IsMyLifeAtRisk(state, nearestOtherMine) && state.myHero.gold >= COST_OF_BEER)
             {
                 return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
             }
-            else
+            else if (IsBarInMyRange(state) && state.myHero.life < (MAX_LIFE - MOVE_LIFE_COST) && state.myHero.gold >= COST_OF_BEER)
             {
-                return _pathFinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
+                return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
             }
+
+            return _pathFinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
         }
 
         /// <summary>
@@ -208,6 +211,22 @@ namespace CoveoBlitz.Bot
             if (path.Count() * MOVE_LIFE_COST + GOBELIN_LIFE_COST >= state.myHero.life)
             {
                 return true;
+            }
+
+            return false;
+        }
+
+        private bool IsBarInMyRange(GameState state)
+        {
+            _pathFinder.UpdateBoard(state.board);
+            var neighbors = _pathFinder.GetNeighbors(state.myHero.pos);
+
+            foreach(var neighbor in neighbors)
+            {
+                if(state.board[neighbor.x][neighbor.y] == Tile.TAVERN)
+                {
+                    return true;
+                }
             }
 
             return false;
