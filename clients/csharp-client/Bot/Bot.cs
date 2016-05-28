@@ -14,6 +14,15 @@ namespace CoveoBlitz.Bot
     public class Bot : ISimpleBot
     {
         private readonly Random random = new Random();
+
+        //constantes
+        private static int COST_OF_BEER = 1;
+        private static int GOBELIN_LIFE_COST = 25;
+        private static int DEFENSE_LIFE_COST = 20;
+        private static int PIKES_LIFE_COST = 10;
+        private static int BEER_LIFE_GAIN = 25;
+        private static int MOVE_LIFE_COST = 1;
+
         private List<Pos> _bars;
         private List<Pos> _myMines;
         private List<Pos> _otherMines;
@@ -37,24 +46,6 @@ namespace CoveoBlitz.Bot
         {
             _othersHeroes = new List<int>();
             FindMyHero(state);
-
-            switch(state.myHero.id)
-            {
-                case 1:
-                    _myMineID = Tile.GOLD_MINE_1;
-                    break;
-                case 2:
-                    _myMineID = Tile.GOLD_MINE_2;
-                    break;
-
-                case 3:
-                    _myMineID = Tile.GOLD_MINE_3;
-                    break;
-
-                case 4:
-                    _myMineID = Tile.GOLD_MINE_4;
-                    break;
-            }
 
             _bars = FindTile(state, Tile.TAVERN);
             _myMines = FindTile(state, _myMineID);
@@ -87,8 +78,14 @@ namespace CoveoBlitz.Bot
             var nearestBar = FindNearestBar(state);
             var nearestOtherMine = FindNearestOtherMine(state);
 
-            //return pathfinder.NavigateTowards(state.myHero.pos, nearestBar);
-            return pathfinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
+            if (IsMyLifeAtRisk(state, nearestOtherMine))
+            {
+                return pathfinder.NavigateTowards(state.myHero.pos, nearestBar);
+            }
+            else
+            {
+                return pathfinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
+            }
 
             // TODO implement SkyNet here
             // Pathfinding example:
@@ -185,6 +182,38 @@ namespace CoveoBlitz.Bot
             }
 
             return nearestOtherMine;
+        }
+
+        private Hero FindNearestHero(GameState state)
+        {
+            //Trouver le bar le plus proche
+            Hero nearestHero = new Hero();
+            int nbMoves = 1000000000;
+            var pathfinder = new Pathfinder(state.board);
+            foreach (var hero in state.heroes)
+            {
+                var pathToMine = pathfinder.ShortestPath(state.myHero.pos, hero.pos);
+                if (pathToMine.Count() < nbMoves && pathToMine.Count() != 0)
+                {
+                    nbMoves = pathToMine.Count();
+                    nearestHero = hero;
+                }
+            }
+
+            return nearestHero;
+        }
+
+        private bool IsMyLifeAtRisk(GameState state, Pos nearestOtherMine)
+        {
+            var pathfinder = new Pathfinder(state.board);
+            var path = pathfinder.ShortestPath(state.myHero.pos, nearestOtherMine);
+
+            if (path.Count() * MOVE_LIFE_COST + GOBELIN_LIFE_COST >= state.myHero.life)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

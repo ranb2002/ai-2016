@@ -99,7 +99,7 @@ namespace CoveoBlitz.Bot
         private bool IsPassable(Pos p)
         {
             var tile = Board[p.x][p.y];
-            return tile == Tile.FREE || tile == Tile.SPIKES ||
+            return tile == Tile.FREE ||
                 tile == Tile.HERO_1 || tile == Tile.HERO_2 ||
                 tile == Tile.HERO_3 || tile == Tile.HERO_4;
         }
