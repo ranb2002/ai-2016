@@ -78,11 +78,12 @@ namespace CoveoBlitz.Bot
         /// <returns></returns>
         public string Move(GameState state)
         {
+            _pathFinder.UpdateBoard(state.board);
             UpdateMines(state);
 
-            _pathFinder.UpdateBoard(state.board);
             var nearestBar = FindNearestBar(state);
             var nearestOtherMine = FindNearestOtherMine(state);
+            var nearestHero = FindNearestHero(state);
 
             if (IsMyLifeAtRisk(state, nearestOtherMine) && state.myHero.gold >= COST_OF_BEER)
             {
@@ -92,7 +93,10 @@ namespace CoveoBlitz.Bot
             {
                 return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
             }
-
+            else if (nearestHero.mineCount >= 3 && nearestHero.life + DEFENSE_LIFE_COST < state.myHero.life)
+            {
+                return _pathFinder.NavigateTowards(state.myHero.pos, nearestHero.pos);
+            }
             return _pathFinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
         }
 
@@ -151,13 +155,13 @@ namespace CoveoBlitz.Bot
             //Trouver le bar le plus proche
             Pos nearestBar = new Pos(0,0);
             int nbMoves = 1000000000;
-            _pathFinder.UpdateBoard(state.board);
             foreach(var bar in _bars)
             {
                 var pathToBar = _pathFinder.ShortestPath(state.myHero.pos, bar);
-                if(pathToBar.Count() < nbMoves)
+                int pathCost = PathCost(state, pathToBar);
+                if (pathCost < nbMoves)
                 {
-                    nbMoves = pathToBar.Count();
+                    nbMoves = pathCost;
                     nearestBar = bar;
                 }
             }
@@ -170,13 +174,13 @@ namespace CoveoBlitz.Bot
             //Trouver le bar le plus proche
             Pos nearestOtherMine = new Pos(0, 0);
             int nbMoves = 1000000000;
-            _pathFinder.UpdateBoard(state.board);
             foreach (var mine in _otherMines)
             {
                 var pathToMine = _pathFinder.ShortestPath(state.myHero.pos, mine);
-                if (pathToMine.Count() < nbMoves)
+                int pathCost = PathCost(state, pathToMine);
+                if (pathCost < nbMoves)
                 {
-                    nbMoves = pathToMine.Count();
+                    nbMoves = pathCost;
                     nearestOtherMine = mine;
                 }
             }
@@ -189,14 +193,17 @@ namespace CoveoBlitz.Bot
             //Trouver le bar le plus proche
             Hero nearestHero = new Hero();
             int nbMoves = 1000000000;
-            _pathFinder.UpdateBoard(state.board);
             foreach (var hero in state.heroes)
             {
-                var pathToMine = _pathFinder.ShortestPath(state.myHero.pos, hero.pos);
-                if (pathToMine.Count() < nbMoves && pathToMine.Count() != 0)
+                if(hero.id != state.myHero.id)
                 {
-                    nbMoves = pathToMine.Count();
-                    nearestHero = hero;
+                    var pathToHero = _pathFinder.ShortestPath(state.myHero.pos, hero.pos);
+                    int pathCost = PathCost(state, pathToHero);
+                    if (pathCost < nbMoves)
+                    {
+                        nbMoves = pathCost;
+                        nearestHero = hero;
+                    }
                 }
             }
 
@@ -205,7 +212,6 @@ namespace CoveoBlitz.Bot
 
         private bool IsMyLifeAtRisk(GameState state, Pos nearestOtherMine)
         {
-            _pathFinder.UpdateBoard(state.board);
             var path = _pathFinder.ShortestPath(state.myHero.pos, nearestOtherMine);
 
             if (PathCost(state, path) * MOVE_LIFE_COST + GOBELIN_LIFE_COST >= state.myHero.life)
@@ -229,7 +235,6 @@ namespace CoveoBlitz.Bot
 
         private bool IsBarInMyRange(GameState state)
         {
-            _pathFinder.UpdateBoard(state.board);
             var neighbors = _pathFinder.GetNeighbors(state.myHero.pos);
 
             foreach(var neighbor in neighbors)
