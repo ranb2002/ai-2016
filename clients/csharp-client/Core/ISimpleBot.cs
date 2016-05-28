@@ -2,7 +2,7 @@ namespace CoveoBlitz
 {
     public interface ISimpleBot
     {
-        void Setup();
+        void Setup(GameState state);
 
         void Shutdown();
 
