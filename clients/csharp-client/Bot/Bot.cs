@@ -28,6 +28,8 @@ namespace CoveoBlitz.Bot
         private List<Pos> _otherMines;
         private Tile _myMineID;
         private Tile _myHeroTile;
+        private Pathfinder _pathFinder;
+        private int _numPlayers;
 
         private const string _name = "RAWR";
         private int _IDMyHero;
@@ -38,8 +40,9 @@ namespace CoveoBlitz.Bot
         /// </summary>
         public void Setup(GameState state)
         {
+            _pathFinder = new Pathfinder(state.board);
             ParseMap(state);
-            Console.WriteLine("Coveo's C# RandomBot");
+            Console.WriteLine("RAWR's - C# - RAWRBot v.1.0");
         }
 
         private void ParseMap(GameState state)
@@ -74,17 +77,19 @@ namespace CoveoBlitz.Bot
         /// <returns></returns>
         public string Move(GameState state)
         {
-            var pathfinder = new Pathfinder (state.board);
+            UpdateMines(state);
+
+            _pathFinder.UpdateBoard(state.board);
             var nearestBar = FindNearestBar(state);
             var nearestOtherMine = FindNearestOtherMine(state);
 
             if (IsMyLifeAtRisk(state, nearestOtherMine))
             {
-                return pathfinder.NavigateTowards(state.myHero.pos, nearestBar);
+                return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
             }
             else
             {
-                return pathfinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
+                return _pathFinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
             }
 
             // TODO implement SkyNet here
@@ -151,10 +156,10 @@ namespace CoveoBlitz.Bot
             //Trouver le bar le plus proche
             Pos nearestBar = new Pos(0,0);
             int nbMoves = 1000000000;
-            var pathfinder = new Pathfinder(state.board);
+            _pathFinder.UpdateBoard(state.board);
             foreach(var bar in _bars)
             {
-                var pathToBar = pathfinder.ShortestPath(state.myHero.pos, bar);
+                var pathToBar = _pathFinder.ShortestPath(state.myHero.pos, bar);
                 if(pathToBar.Count() < nbMoves)
                 {
                     nbMoves = pathToBar.Count();
@@ -170,10 +175,10 @@ namespace CoveoBlitz.Bot
             //Trouver le bar le plus proche
             Pos nearestOtherMine = new Pos(0, 0);
             int nbMoves = 1000000000;
-            var pathfinder = new Pathfinder(state.board);
+            _pathFinder.UpdateBoard(state.board);
             foreach (var mine in _otherMines)
             {
-                var pathToMine = pathfinder.ShortestPath(state.myHero.pos, mine);
+                var pathToMine = _pathFinder.ShortestPath(state.myHero.pos, mine);
                 if (pathToMine.Count() < nbMoves)
                 {
                     nbMoves = pathToMine.Count();
@@ -189,10 +194,10 @@ namespace CoveoBlitz.Bot
             //Trouver le bar le plus proche
             Hero nearestHero = new Hero();
             int nbMoves = 1000000000;
-            var pathfinder = new Pathfinder(state.board);
+            _pathFinder.UpdateBoard(state.board);
             foreach (var hero in state.heroes)
             {
-                var pathToMine = pathfinder.ShortestPath(state.myHero.pos, hero.pos);
+                var pathToMine = _pathFinder.ShortestPath(state.myHero.pos, hero.pos);
                 if (pathToMine.Count() < nbMoves && pathToMine.Count() != 0)
                 {
                     nbMoves = pathToMine.Count();
@@ -205,8 +210,8 @@ namespace CoveoBlitz.Bot
 
         private bool IsMyLifeAtRisk(GameState state, Pos nearestOtherMine)
         {
-            var pathfinder = new Pathfinder(state.board);
-            var path = pathfinder.ShortestPath(state.myHero.pos, nearestOtherMine);
+            _pathFinder.UpdateBoard(state.board);
+            var path = _pathFinder.ShortestPath(state.myHero.pos, nearestOtherMine);
 
             if (path.Count() * MOVE_LIFE_COST + GOBELIN_LIFE_COST >= state.myHero.life)
             {
@@ -214,6 +219,90 @@ namespace CoveoBlitz.Bot
             }
 
             return false;
+        }
+
+        //Function that return true if at least one player is dead and lost all his mines
+        private bool IsDeadPlayer(GameState state)
+        {
+            Hero h;
+            for (int i = 0; i < _numPlayers; ++i)
+            {
+                h = state.heroes[i];
+
+                //Is the player on its spawnpos AND has no mines AND has 100 life
+                if (h.pos.Equals(h.spawnPos) && h.mineCount == 0 && h.life == 100)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void UpdateMines(GameState state)
+        {
+            List<Pos> posAround = new List<Pos>();
+            _numPlayers = state.heroes.Count;
+
+            //We need to update all mines as at least one player is dead
+            if (IsDeadPlayer(state))
+            {
+                List<Pos> allMinesPos = new List<Pos>();
+                allMinesPos.AddRange(_myMines);
+                allMinesPos.AddRange(_otherMines);
+
+                _myMines.Clear();
+                _otherMines.Clear();
+
+                int numMines = allMinesPos.Count;
+                var board = state.board;
+                Pos p;
+
+                for (int i = 0; i < numMines; ++i)
+                {
+                    p = allMinesPos[i];
+                    if (state.board[p.x][p.y] == _myMineID)
+                        _myMines.Add(p);
+                    else
+                        _otherMines.Add(p);
+                }
+            }
+            else
+            {
+                //We can update only mines around each players
+                //  Search all positions around players
+                for (int i = 0; i < _numPlayers; ++i)
+                    posAround.AddRange(_pathFinder.GetNeighbors(state.heroes[i].pos));
+
+                int numPos = posAround.Count;
+                Pos p;
+
+                bool isMyMine;
+                bool inMyMines;
+
+                //  Update all mines in positions
+                for (int i = 0; i < numPos; ++i)
+                {
+                    p = posAround[i];
+
+                    //Is pos a mine?
+                    if (_pathFinder.IsMine(p))
+                    {
+                        isMyMine = _pathFinder.IsMyMine(p, _myMineID);
+                        inMyMines = _myMines.Contains(p);
+
+                        //Is it my new mine?
+                        if (isMyMine && !inMyMines)
+                        {
+                            _myMines.Add(p);
+                            _otherMines.Remove(p);
+                        } //Is it my lost mine?
+                        else if (!isMyMine && inMyMines)
+                        {
+                            _myMines.Remove(p);
+                            _otherMines.Add(p);
+                        }
+                    }
+                }
+            }
         }
     }
 }

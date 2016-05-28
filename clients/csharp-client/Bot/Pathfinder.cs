@@ -104,7 +104,7 @@ namespace CoveoBlitz.Bot
                 tile == Tile.HERO_3 || tile == Tile.HERO_4;
         }
 
-        private IList<Pos> GetNeighbors(Pos p)
+        public IList<Pos> GetNeighbors(Pos p)
         {
             var neighbors = new List<Pos>();
             if (p.x - 1 >= 0) neighbors.Add(new Pos(p.x - 1, p.y));
@@ -113,5 +113,22 @@ namespace CoveoBlitz.Bot
             if (p.y + 1 < Board[0].Length) neighbors.Add(new Pos(p.x, p.y + 1));
             return neighbors;
         }
+
+        public bool IsMine(Pos p)
+       {
+           var tile = Board[p.x][p.y];
+           return tile == Tile.GOLD_MINE_NEUTRAL || tile == Tile.GOLD_MINE_1 || tile == Tile.GOLD_MINE_2 ||
+               tile == Tile.GOLD_MINE_3 || tile == Tile.GOLD_MINE_4;
+       }
+
+       public bool IsMyMine(Pos p, Tile t)
+       {
+           return Board[p.x][p.y] == t;
+       }
+
+       public void UpdateBoard(Tile[][] board)
+       {
+           Board = board;
+       }
     }
 }
