@@ -60,11 +60,23 @@ namespace CoveoBlitz.Bot
                 }
 
                 foreach (var v in neighbors) {
-                    if (IsPassable(v) && !distances.ContainsKey(v)) {
-                        distances.Add (v, distances [u] + 1 /*+ Board[v.x][v.y] == Tile.SPIKES ? PIKES_LIFE_COST : 0*/);
-                        predecessors.Add(v, u);
-                        nodes.Add(v);
+                    var newDistV = distances[u] + 1 + (Board[v.x][v.y] == Tile.SPIKES ? PIKES_LIFE_COST : 0);
+                    if(IsPassable(v))
+                    {
+                        if(!distances.ContainsKey(v)) 
+                        {
+                            distances.Add(v, newDistV);
+                            predecessors.Add(v, u);
+                            nodes.Add(v);
+                        }
+                        else if (distances[v] > newDistV)
+                        {
+                            distances[v] = newDistV;
+                            predecessors[v] = u;
+                        }
                     }
+
+
                 }
             }
 

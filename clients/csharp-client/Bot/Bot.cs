@@ -43,7 +43,7 @@ namespace CoveoBlitz.Bot
         {
             _pathFinder = new Pathfinder(state.board);
             ParseMap(state);
-            Console.WriteLine("RAWR's - C# - RAWRBot v.1.0");
+            Console.WriteLine("RAWR's - C# - RAWRBot v.1.1");
         }
 
         private void ParseMap(GameState state)
@@ -86,17 +86,17 @@ namespace CoveoBlitz.Bot
             var nearestHero = FindNearestHero(state);
 
             if (IsMyLifeAtRisk(state, nearestOtherMine) && state.myHero.gold >= COST_OF_BEER)
-            {
                 return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
-            }
-            else if (IsBarInMyRange(state) && state.myHero.life < (MAX_LIFE - MOVE_LIFE_COST) && state.myHero.gold >= COST_OF_BEER)
-            {
+            
+            if (IsBarInMyRange(state) && state.myHero.life < (MAX_LIFE - 10) && state.myHero.gold >= COST_OF_BEER)
                 return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
-            }
-            else if (nearestHero.mineCount >= 3 && nearestHero.life + DEFENSE_LIFE_COST < state.myHero.life)
-            {
+
+            if (nearestHero.mineCount >= 3 && nearestHero.life + DEFENSE_LIFE_COST < state.myHero.life)
                 return _pathFinder.NavigateTowards(state.myHero.pos, nearestHero.pos);
-            }
+
+            if (_otherMines.Count == 0)
+                return _pathFinder.NavigateTowards(state.myHero.pos, nearestBar);
+
             return _pathFinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
         }
 
@@ -257,7 +257,7 @@ namespace CoveoBlitz.Bot
                 h = state.heroes[i];
 
                 //Is the player on its spawnpos AND has no mines AND has 100 life
-                if (h.pos.Equals(h.spawnPos) && h.mineCount == 0 && h.life == 100)
+                if (h.pos.Equals(h.spawnPos) && h.mineCount == 0 && h.life >= 89)
                     return true;
             }
 
