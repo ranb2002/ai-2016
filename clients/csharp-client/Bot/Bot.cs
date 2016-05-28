@@ -91,36 +91,6 @@ namespace CoveoBlitz.Bot
             {
                 return _pathFinder.NavigateTowards(state.myHero.pos, nearestOtherMine);
             }
-
-            // TODO implement SkyNet here
-            // Pathfinding example:
-            // string direction = pathfinder.NavigateTowards(state.myHero.pos, new Pos(0, 0));
-            string direction;
-
-            switch (random.Next(0, 5)) {
-                case 0:
-                    direction = Direction.East;
-                    break;
-
-                case 1:
-                    direction = Direction.West;
-                    break;
-
-                case 2:
-                    direction = Direction.North;
-                    break;
-
-                case 3:
-                    direction = Direction.South;
-                    break;
-
-                default:
-                    direction = Direction.Stay;
-                    break;
-            }
-
-            Console.WriteLine("Completed turn {0}, going {1}", state.currentTurn, direction);
-            return direction;
         }
 
         /// <summary>

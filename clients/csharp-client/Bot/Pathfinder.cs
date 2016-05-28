@@ -25,7 +25,6 @@ namespace CoveoBlitz.Bot
         public string NavigateTowards(Pos source, Pos destination)
         {
             var path = ShortestPath(source, destination);
-            //path.ToList().ForEach(i => Console.Write("{0}\t", i));
             if (path.Count > 0) return DirectionTowards(source, path[0]);
             return Direction.Stay;
         }
@@ -55,7 +54,6 @@ namespace CoveoBlitz.Bot
 
                 if (neighbors.Contains(destination)) {
                     predecessors.Add(destination, u);
-                    //Console.WriteLine ("DONE");
                     break;
                 }
 
@@ -77,7 +75,6 @@ namespace CoveoBlitz.Bot
             var n = destination;
 
             while (predecessors.ContainsKey (n)) {
-                Console.WriteLine (n);
                 path.Add (n);
                 n = predecessors [n];
             }
